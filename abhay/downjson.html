@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Excel to JSON</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.core.min.js"></script>
+    <script>
+        function convertExcelToJson() {
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+                var data = new Uint8Array(e.target.result);
+                var workbook = XLSX.read(data, { type: 'array' });
+                
+                var worksheetName = workbook.SheetNames[0]; // Assuming the first sheet
+                var worksheet = workbook.Sheets[worksheetName];
+                
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                
+                // Convert the JSON data to a downloadable file
+                var jsonDataString = JSON.stringify(jsonData, null, 2);
+                var blob = new Blob([jsonDataString], { type: 'application/json' });
+                
+                // Create a download link
+                var downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(blob);
+                downloadLink.download = 'data.json';
+                
+                // Append the download link to the document body and click it programmatically
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+    </script>
+</head>
+<body>
+    <h2>Convert Excel to JSON</h2>
+    <input type="file" id="fileInput">
+    <button onclick="convertExcelToJson()">Convert</button>
+</body>
+</html>

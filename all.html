@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Excel to JSON with SHA256 | Javacodepoint</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.min.js"></script>
+</head>
+<body>
+  <h1>Upload an Excel file to convert to JSON and update with SHA256</h1>
+  <input type="file" id="file_upload" />
+  <button onclick="convertAndUpload()">Convert and Upload</button>
+  <br><br>
+  <textarea id="json-result" style="display:none;height:500px;width:350px;"></textarea>
+  <script>
+    // Method to convert Excel file to JSON and update with SHA256
+    function convertAndUpload() {
+      var files = document.getElementById('file_upload').files;
+      if (files.length == 0) {
+        alert("Please choose a file...");
+        return;
+      }
+      var filename = files[0].name;
+      var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
+      if (extension == '.XLS' || extension == '.XLSX') {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var data = e.target.result;
+          var workbook = XLSX.read(data, { type: 'binary' });
+          var result = {};
+          workbook.SheetNames.forEach(function(sheetName) {
+            var roa = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+            if (roa.length > 0) {
+              result[sheetName] = roa;
+            }
+          });
+
+          // Updating the JSON with SHA256 hash
+          for (const sheetName in result) {
+            if (result.hasOwnProperty(sheetName)) {
+              const sheetData = result[sheetName];
+
+              const updatedData = sheetData.map((person) => {
+                const { Name, Age, Email } = person;
+                const combinedString = `${Name}${Age}${Email}`;
+                const hash = calculateSHA256Hash(combinedString);
+
+                return { ...person, Hash: hash };
+              });
+
+              result[sheetName] = updatedData;
+            }
+          }
+
+          // Converting JSON back to Excel file
+          var wb = XLSX.utils.book_new();
+          for (const sheetName in result) {
+            if (result.hasOwnProperty(sheetName)) {
+              var ws = XLSX.utils.json_to_sheet(result[sheetName]);
+              XLSX.utils.book_append_sheet(wb, ws, sheetName);
+            }
+          }
+          var excelData = XLSX.write(wb, { type: 'binary', bookType: 'xlsx' });
+
+          // Saving the Excel file
+          var byteArray = new Uint8Array(excelData.length);
+          for (var i = 0; i < excelData.length; i++) {
+            byteArray[i] = excelData.charCodeAt(i) & 0xff;
+          }
+          var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+          var url = URL.createObjectURL(blob);
+          var link = document.createElement('a');
+          link.href = url;
+          link.download = 'updated_data.xlsx';
+          link.click();
+        };
+        reader.readAsBinaryString(files[0]);
+      } else {
+        alert("Please select a valid Excel file.");
+      }
+    }
+
+    // Function to calculate SHA256 hash
+    function calculateSHA256Hash(data) {
+      var hash = CryptoJS.SHA256(data);
+      return hash.toString();
+    }
+  </script>
+</body>
+</html>

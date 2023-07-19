@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sample Certificate</title>
+</head>
+<body>
+  <h1>Certificate!!</h1>
+  <div id="certificateName">This should change</div>
+
+  <script>
+    // Get the name from the URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get('name');
+
+    // Display the name on the certificate
+    document.getElementById('certificateName').innerText = name;
+  </script>
+</body>
+</html>

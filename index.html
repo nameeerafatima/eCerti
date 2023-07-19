@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SHA-256 Hash Calculator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+</head>
+<body>
+  <h1>SHA-256 Hash Calculator</h1>
+  <label for="inputText">Enter text:</label>
+  <input type="text" id="inputText" placeholder="Enter text">
+  <button onclick="calculateHash()">Calculate Hash</button>
+  <p id="hashResult"></p>
+
+  <script>
+    function calculateHash() {
+      var inputText = document.getElementById("inputText").value;
+      var hashResult = document.getElementById("hashResult");
+      
+      // Calculate the SHA-256 hash
+      var hashedValue = sha256(inputText);
+      
+      // Display the hashed value
+      hashResult.innerHTML = "Hashed value: " + hashedValue;
+    }
+  </script>
+</body>
+</html>

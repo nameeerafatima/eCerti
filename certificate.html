@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>E-Certificate Template</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      margin-top: 50px;
+    }
+
+    p {
+      color: #777;
+    }
+
+    .certificate {
+      margin: 50px auto;
+      width: 600px;
+      padding: 20px;
+      border: 2px solid #333;
+      border-radius: 10px;
+    }
+
+    .logo {
+      width: 200px;
+      margin: 0 auto;
+    }
+
+    .name {
+      font-size: 24px;
+      margin-top: 30px;
+    }
+
+    .event {
+      font-size: 18px;
+      margin-top: 20px;
+      color: #555;
+    }
+
+    .date {
+      font-size: 16px;
+      margin-top: 10px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+    <div class="certificate">
+      <h1>Certificate of Completion</h1>
+      <p>This is to certify that</p>
+      <h2 id="stname"><%= name %></h2>
+      <p>has successfully completed the</p>
+      <h3 class="event">Web Development Course</h3>
+      <p class="date">Date: July 18, 2023</p>
+      <script src="linkdb.js"/>
+    </div>
+  </body>
+</html>
