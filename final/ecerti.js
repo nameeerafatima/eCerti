@@ -1,4 +1,3 @@
-
 const http = require('http');
 const url = require('url');
 const sqlite3 = require('sqlite3').verbose();
@@ -6,7 +5,7 @@ const ejs = require('ejs');
 const fs = require('fs');
 
 // Create a new SQLite database connection
-const db = new sqlite3.Database('database.db');
+const db = new sqlite3.Database('data.db');
 
 // Create the server
 const server = http.createServer((req, res) => {
@@ -14,13 +13,13 @@ const server = http.createServer((req, res) => {
 
   // Get data based on the provided hash value
   if (parsedUrl.pathname === '/api' && req.method === 'GET') {
-    const hash = parsedUrl.query.hash;
-    
+    const hashValue = parsedUrl.query.hash;
+
     // Prepare the SQL query
-    const sql = 'SELECT * FROM sheet WHERE Hash = ?';
+    const sql = 'SELECT * FROM data WHERE hashValue = ?';
 
     // Execute the query with the provided hash value
-    db.get(sql, [hash], (err, row) => {
+    db.get(sql, [hashValue], (err, row) => {
       if (err) {
         console.error(err); // Log the error
         res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -34,7 +33,8 @@ const server = http.createServer((req, res) => {
             res.end(JSON.stringify({ message: 'Internal Server Error' }));
           } else {
             // Render the template with the retrieved data
-            const renderedHtml = ejs.render(template, { name: row.name });
+            console.log(row.Name);
+            const renderedHtml = ejs.render(template, { Name: row.Name });
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end(renderedHtml);
           }
@@ -53,7 +53,7 @@ const server = http.createServer((req, res) => {
 });
 
 // Start the server
-const port = 3000;
+const port = 3000; // Change the port number if necessary
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

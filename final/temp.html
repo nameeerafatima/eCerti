@@ -49,14 +49,20 @@
   </style>
 </head>
 <body>
-    <div class="certificate">
-      <h1>Certificate of Completion</h1>
-      <p>This is to certify that</p>
-      <h2 id="stname"><%= name %></h2>
-      <p>has successfully completed the</p>
-      <h3 class="event">Web Development Course</h3>
-      <p class="date">Date: July 18, 2023</p>
-      <script src="linkdb.js"/>
-    </div>
-  </body>
+  <div class="certificate">
+    <h1>Certificate of Completion</h1>
+    <p>This is to certify that</p>
+    <h2 id="stname"><%= Name %></h2>
+    <p>bearing roll number</p>
+    <%= Rollno %>
+    <p>has successfully completed the</p>
+    <h3 class="event"><%= Title %></h3>
+    <p>under the mentorship of</p>
+    <h3><%= Mentor %> </h3>
+    <p>for a duration of</p>
+    <h3><%= Duration %> months </h3>
+    <p>which ended on </p>
+    <p class="date"><%= Completion %></p>
+  </div>
+</body>
 </html>
